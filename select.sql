@@ -325,16 +325,27 @@ SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORD
 -- |___|_| \_|_| \_|_____|_| \_\  \___/ \___/___|_| \_|
 
 -- pour séléctionner des entrées liées entre 2 tables
+-- le mot clé INNER est optionnel
 SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
 FROM orders o
 JOIN customers c
-ON o.customerNumber = c.customerNumber;
+  ON o.customerNumber = c.customerNumber;
+
+SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
+FROM orders o
+INNER JOIN customers c
+  ON o.customerNumber = c.customerNumber;
+
+-- syntaxe implicit
+SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
+FROM orders o, customers c
+WHERE o.customerNumber = c.customerNumber;
 
 -- tout les mots clés vu jusqu'a maintenant s'appliquent de la même façon
 SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
 FROM orders o
 JOIN customers c
-ON o.customerNumber = c.customerNumber
+  ON o.customerNumber = c.customerNumber
 WHERE o.orderNumber > 10200
 AND o.orderNumber
 BETWEEN 10200 AND 10500
@@ -352,32 +363,76 @@ OFFSET 25;
 SELECT c.customerName, p.amount, p.paymentDate
 FROM customers c
 JOIN payments p
-ON c.customerNumber = p.customerNumber
+  ON c.customerNumber = p.customerNumber
 ORDER BY p.amount;
 --* 2)
 SELECT c.customerName, p.amount, o.orderDate, p.paymentDate, o.status
 FROM customers c
 JOIN payments p
-ON c.customerNumber = p.customerNumber
+  ON c.customerNumber = p.customerNumber
 JOIN orders o
-ON o.customerNumber = c.customerNumber
+  ON o.customerNumber = c.customerNumber
 ORDER BY p.amount
 LIMIT 30;
 
+--  ____  _____ _     _____       _  ___ ___ _   _
+-- / ___|| ____| |   |  ___|     | |/ _ \_ _| \ | |
+-- \___ \|  _| | |   | |_     _  | | | | | ||  \| |
+--  ___) | |___| |___|  _|   | |_| | |_| | || |\  |
+-- |____/|_____|_____|_|      \___/ \___/___|_| \_|
+
+SELECT
+e.employeeNumber,
+e.firstName,
+e.lastName,
+e.reportsTo,
+m.employeeNumber AS managerNumber,
+m.firstName,
+m.lastName
+FROM employees e
+JOIN employees m
+ON e.reportsTo = m.employeeNumber;
+
+--   ___  _   _ _____ _____ ____        _  ___ ___ _   _
+--  / _ \| | | |_   _| ____|  _ \      | |/ _ \_ _| \ | |
+-- | | | | | | | | | |  _| | |_) |  _  | | | | | ||  \| |
+-- | |_| | |_| | | | | |___|  _ <  | |_| | |_| | || |\  |
+--  \___/ \___/  |_| |_____|_| \_\  \___/ \___/___|_| \_|
+
+-- LEFT OUTER JOIN : le mot clé OUTER est optionnel
+-- renvoie toutes les entrées de la table de gauche même si aucune correspondance dans la table de droite
+SELECT c.customerNumber, c.customerName, o.orderNumber
+FROM customers c
+LEFT OUTER JOIN
+orders o
+  ON c.customerNumber = o.customerNumber
+ORDER BY c.customerNumber;
+
+-- RIGHT OUTER JOIN : le mot clé OUTER est optionnel
+-- renvoie toutes les entrées de la table de droite même si aucune correspondance dans la table de gauche
+SELECT c.customerNumber, c.customerName, o.orderNumber
+FROM customers c
+RIGHT OUTER JOIN
+orders o
+  ON c.customerNumber = o.customerNumber
+ORDER BY c.customerNumber;
+
+--  _   _ ____ ___ _   _  ____
+-- | | | / ___|_ _| \ | |/ ___|
+-- | | | \___ \| ||  \| | |  _
+-- | |_| |___) | || |\  | |_| |
+--  \___/|____/___|_| \_|\____|
+
+SELECT c.customerName, o.orderDate FROM customers c JOIN orders o USING (customerNumber);
+
+--? exercices :
+--? 1) séléctionner customerName dans la table customers, séléctionner amount et
+--?    paymentDate de la table payments en utilisant une jointure avec le mot clé USING
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+--! correction
+--* 1)
+SELECT c.customerName, p.amount, p.paymentDate FROM customers c JOIN payments p USING (customerNumber);
 
 
 
@@ -412,5 +467,20 @@ LIMIT 30;
 -- | |__| |_| | |\  | |___ / ___ \| |
 --  \____\___/|_| \_|\____/_/   \_\_|
 
---?  4) séléctionner le nom complet des employés qui ont pour travail (jobTitle) Sales Rep
+--?  1) séléctionner le nom complet des employés qui ont pour travail (jobTitle) Sales Rep
+--?  2) séléctionner le nom complet des employés qui ont pour travail (jobTitle) Sales Rep
+
+--! correction
+--* 1)
 SELECT CONCAT(firstName, ' ', lastName) AS fullName FROM employees WHERE jobTitle = "Sales Rep";
+--* 2)
+SELECT
+e.employeeNumber,
+e.firstName,
+e.lastName,
+e.reportsTo,
+m.employeeNumber AS managerNumber,
+CONCAT(m.firstName, ' ', m.lastName) AS manager
+FROM employees e
+JOIN employees m
+ON e.reportsTo = m.employeeNumber;
