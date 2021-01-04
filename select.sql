@@ -269,6 +269,8 @@ SELECT * FROM employees WHERE reportsTo IS NULL;
 -- |_____|___|_|\_\_____|
 
 -- séléctionner selon un pattern
+-- % : n'import quel lettre / chiffre ou série de lettres / chiffres
+-- _ : une lettre ou chiffre
 SELECT customerName, country FROM customers WHERE customerName LIKE "%sign%";
 SELECT customerName, country FROM customers WHERE customerName LIKE "sign%";
 SELECT customerName, country FROM customers WHERE customerName LIKE "mini%";
@@ -277,7 +279,68 @@ SELECT customerName, country FROM customers WHERE customerName LIKE "%mini";
 SELECT customerName, country FROM customers WHERE customerName LIKE "%co";
 
 --? exercices :
---? 1)
+--? 1) séléctionner le nom du produit, son prix et sa quantité dans la table products pour tout les produits contentant "mercedes" dans son nom
+--? 2) séléctionner tout les champs dans la tables employees pour les entrées dont le lastName termine par "son";
+--? 3) séléctionner tout les champs dans la tables employees pour les entrées dont le firstName commence par "l";
+
+--! correction
+--* 1)
+SELECT productName FROM products WHERE productName LIKE "%mercedes%";
+--* 2)
+SELECT * FROM employees WHERE lastName LIKE "%son";
+--* 3)
+SELECT * FROM employees WHERE firstName LIKE "l%";
+
+--   ___  _____ _____ ____  _____ _____
+--  / _ \|  ___|  ___/ ___|| ____|_   _|
+-- | | | | |_  | |_  \___ \|  _|   | |
+-- | |_| |  _| |  _|  ___) | |___  | |
+--  \___/|_|   |_|   |____/|_____| |_|
+
+-- séléctionner a partir d'un certain endroit dans la liste de résultats
+-- très utile pour les paginations
+SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20 OFFSET 0; -- récupère les 20 premiers
+SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20 OFFSET 20; -- récupère les 20 suivants
+
+--? exercices :
+--? 1) séléctionner 25 entrées dans la table orders à partir de la 50ème, ne récupérer que le orderNumber, orderDate, status en les triant par date
+--? 2) séléctionner 25 entrées dans la table orders à partir de la 25ème (ce qui équivaut à la 2eme page dans le cas d'un site web),
+--?    ne récupérer que le orderNumber, orderDate, status en les triant par date
+--?    pour toutes les entrées dont le status contient "ship"
+--? 3) faire de même que 2) mais en récupérant la 3ème et 4èeme page
+
+--! correction
+--* 1)
+SELECT orderNumber, orderDate, status FROM orders ORDER BY orderDate LIMIT 25 OFFSET 50;
+--* 2)
+SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 25;
+--* 3)
+SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 50;
+SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 75;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
