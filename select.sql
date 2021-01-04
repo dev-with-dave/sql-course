@@ -580,3 +580,15 @@ SELECT orderNumber, orderDate, "archived" AS type
 FROM orders
 WHERE orderDate < "2005-01-01"
 ORDER BY orderDate DESC;
+
+-- sous requêtes
+-- En SQL on peut utiliser le résultat d'une requête au sein d'une requête
+
+SELECT customerNumber, customerName, city, country
+FROM customers
+WHERE city IN (
+  SELECT city
+  FROM customers
+  WHERE customerNumber > 480
+  )
+AND customerNumber > 300;
