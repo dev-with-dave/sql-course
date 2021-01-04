@@ -9,6 +9,10 @@
 --  ___) | |___| |___| |__| |___  | |
 -- |____/|_____|_____|_____\____| |_|
 
+-- L’utilisation la plus courante de SQL consiste à lire des données issues de la base de données.
+-- Cela s’effectue grâce à la commande SELECT, qui retourne des enregistrements dans un tableau de résultat.
+-- Cette commande peut sélectionner une ou plusieurs colonnes d’une table.
+
 -- tout séléctionner
 SELECT * FROM customers;
 
@@ -53,6 +57,10 @@ SELECT customerName, addressLine1, city, country FROM customers;
 --  ___) | |___| |___| |__| |___  | |   | |_| | | ___) || |  | || |\  | |___  | |
 -- |____/|_____|_____|_____\____| |_|   |____/___|____/ |_| |___|_| \_|\____| |_|
 
+-- L’utilisation de la commande SELECT en SQL permet de lire toutes les données d’une ou plusieurs colonnes.
+-- Cette commande peut potentiellement afficher des lignes en doubles.
+-- Pour éviter des redondances dans les résultats il faut simplement ajouter DISTINCT après le mot SELECT.
+
 -- séléctionner en enlevant les doublons
 SELECT DISTINCT city FROM customers;
 
@@ -68,7 +76,8 @@ SELECT DISTINCT state FROM customers;
 --   \ V  V / |  _  | |___|  _ <| |___
 --    \_/\_/  |_| |_|_____|_| \_\_____|
 
--- séléctionner avec une condition
+-- La commande WHERE dans une requête SQL permet d’extraire les lignes d’une
+-- base de données qui respectent une condition. Cela permet d’obtenir uniquement les informations désirées.
 SELECT * FROM customers WHERE customerNumber = 242;
 
 --? exercices :
@@ -93,7 +102,9 @@ SELECT firstName, lastName FROM employees WHERE jobTitle = "Sales Rep";
 -- | |_| |  _ <| |_| | |___|  _ <  | |_) || |
 --  \___/|_| \_\____/|_____|_| \_\ |____/ |_|
 
--- séléctionner en ordonnant par ordre décroissant
+-- La commande ORDER BY permet de trier les lignes dans un résultat d’une requête SQL.
+-- Il est possible de trier les données sur une ou plusieurs colonnes, par ordre ascendant ou descendant.
+-- par ordre décroissant
 SELECT
 customerNumber,
 customerName,
@@ -103,6 +114,28 @@ city,
 state
 FROM customers
 ORDER BY customerName DESC;
+
+-- par ordre croissant
+SELECT
+customerNumber,
+customerName,
+phone,
+addressLine1,
+city,
+state
+FROM customers
+ORDER BY customerName;
+
+-- ou
+SELECT
+customerNumber,
+customerName,
+phone,
+addressLine1,
+city,
+state
+FROM customers
+ORDER BY customerName ASC;
 
 --? exercices :
 --?  1) séléctionner la date de paiement et le montant de chaque paiement dans la table payements en ordonnant par date de manière décroissante
@@ -120,7 +153,8 @@ SELECT paymentDate, amount FROM payments WHERE amount > 60000 ORDER BY amount AS
 -- | |___ | || |  | || |  | |
 -- |_____|___|_|  |_|___| |_|
 
--- séléctionner en imposant une limite de résultats
+-- La clause LIMIT est à utiliser dans une requête SQL pour spécifier
+-- le nombre maximum de résultats que l’ont souhaite obtenir.
 SELECT
 customerNumber,
 customerName,
@@ -143,13 +177,50 @@ SELECT * FROM orders ORDER BY orderDate DESC LIMIT 5;
 --* 2)
 SELECT productName, quantityInStock, buyPrice FROM products ORDER BY quantityInStock LIMIT 20;
 
+-- Cette clause est souvent associé à un OFFSET,
+-- c’est-à-dire effectuer un décalage sur le jeu de résultat.
+-- Ces 2 clauses permettent par exemple d’effectuer des système de pagination
+-- (exemple : récupérer les 10 articles de la page 4).
+
+--   ___  _____ _____ ____  _____ _____
+--  / _ \|  ___|  ___/ ___|| ____|_   _|
+-- | | | | |_  | |_  \___ \|  _|   | |
+-- | |_| |  _| |  _|  ___) | |___  | |
+--  \___/|_|   |_|   |____/|_____| |_|
+
+-- avec MySQL on a le choix entre 2 syyntaxes
+SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20 OFFSET 0; -- récupère les 20 premiers
+-- ou
+SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20, 0; -- récupère les 20 premiers
+
+SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20 OFFSET 20; -- récupère les 20 suivants
+-- ou
+SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20, 20; -- récupère les 20 suivants
+
+--? exercices :
+--? 1) séléctionner 25 entrées dans la table orders à partir de la 50ème, ne récupérer que le orderNumber, orderDate, status en les triant par date
+--? 2) séléctionner 25 entrées dans la table orders à partir de la 25ème (ce qui équivaut à la 2eme page dans le cas d'un site web),
+--?    ne récupérer que le orderNumber, orderDate, status en les triant par date
+--?    pour toutes les entrées dont le status contient "ship"
+--? 3) faire de même que 2) mais en récupérant la 3ème et 4èeme page
+
+--! correction
+--* 1)
+SELECT orderNumber, orderDate, status FROM orders ORDER BY orderDate LIMIT 25 OFFSET 50;
+--* 2)
+SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 25;
+--* 3)
+SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 50;
+SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 75;
+
 --   ___  ____       __     _    _   _ ____
 --  / _ \|  _ \     / /    / \  | \ | |  _ \
 -- | | | | |_) |   / /    / _ \ |  \| | | | |
 -- | |_| |  _ <   / /    / ___ \| |\  | |_| |
 --  \___/|_| \_\ /_/    /_/   \_\_| \_|____/
 
--- séléctionner selon plusieurs condition
+-- Une requête SQL peut être restreinte à l’aide de la condition WHERE.
+-- Les opérateurs logiques AND et OR peuvent être utilisées au sein de la commande WHERE pour combiner des conditions.
 SELECT customerName, city, country FROM customers WHERE city = "London" OR country = "France";
 SELECT customerName, city, country FROM customers WHERE city = "London" AND country = "UK";
 
@@ -192,7 +263,11 @@ SELECT * FROM offices WHERE NOT country = "USA" ORDER BY country;
 --  | || |\  |
 -- |___|_| \_|
 
--- le mot clé IN pour éviter le multiplication des OR
+-- L’opérateur logique IN dans SQL  s’utilise avec la commande WHERE pour vérifier
+-- si une colonne est égale à une des valeurs comprise dans set de valeurs déterminés.
+-- C’est une méthode simple pour vérifier si une colonne est égale à une valeur
+-- OU une autre valeur OU une autre valeur et ainsi de suite,
+-- sans avoir à utiliser de multiple fois l’opérateur OR.
 SELECT customerName, city FROM customers WHERE city = "London" OR city = "Paris" OR city = "NYC" OR city = "Boston" ORDER BY city;
 SELECT customerName, city FROM customers WHERE city IN ("London", "Paris", "NYC", "Boston") ORDER BY city;
 SELECT customerName, city FROM customers WHERE city NOT IN ("London", "Paris", "NYC", "Boston") ORDER BY city;
@@ -217,7 +292,10 @@ SELECT productName, quantityInStock, buyPrice FROM products WHERE buyPrice IN (7
 -- | |_) | |___  | |   \ V  V / | |___| |___| |\  |
 -- |____/|_____| |_|    \_/\_/  |_____|_____|_| \_|
 
--- séléctionner selon un intervalle
+-- L’opérateur BETWEEN est utilisé dans une requête SQL pour sélectionner un intervalle de données
+--  dans une requête utilisant WHERE.
+-- L’intervalle peut être constitué de chaînes de caractères, de nombres ou de dates.
+-- L’exemple le plus concret consiste par exemple à récupérer uniquement les enregistrements entre 2 dates définies.
 SELECT * FROM payments WHERE amount BETWEEN 10000 AND 20000 ORDER BY amount;
 -- au lieu de faire :
 SELECT * FROM payments WHERE amount > 10000 AND amount < 20000 ORDER BY amount;
@@ -248,7 +326,10 @@ SELECT orderDate, status, comments FROM orders WHERE orderDate BETWEEN "2003-03-
 --  | | ___) | | |\  | |_| | |___| |___
 -- |___|____/  |_| \_|\___/|_____|_____|
 
--- séléctionner un champ seulement si sa valeure est NULL
+-- Dans le langage SQL, l’opérateur IS permet de filtrer les résultats qui contiennent la valeur NULL.
+--  Cet opérateur est indispensable car la valeur NULL est une valeur inconnue et
+--  ne peut par conséquent pas être filtrée par les opérateurs de comparaison
+-- (cf. égal, inférieur, supérieur ou différent).
 SELECT customerName, addressLine1, addressLine2 WHERE addressLine2 IS NULL;
 
 --? exercices :
@@ -268,9 +349,13 @@ SELECT * FROM employees WHERE reportsTo IS NULL;
 -- | |___ | || . \| |___
 -- |_____|___|_|\_\_____|
 
--- séléctionner selon un pattern
--- % : n'import quel lettre / chiffre ou série de lettres / chiffres
--- _ : une lettre ou chiffre
+-- L’opérateur LIKE est utilisé dans la clause WHERE des requêtes SQL.
+-- Ce mot-clé permet d’effectuer une recherche sur un modèle particulier.
+-- Il est par exemple possible de rechercher les enregistrements dont la valeur d’une colonne
+--  commence par telle ou telle lettre. Les modèles de recherches sont multiple.
+
+--* % : n'importe quel lettre / chiffre ou série de lettres / chiffres
+--* _ : une lettre ou chiffre
 SELECT customerName, country FROM customers WHERE customerName LIKE "%sign%";
 SELECT customerName, country FROM customers WHERE customerName LIKE "sign%";
 SELECT customerName, country FROM customers WHERE customerName LIKE "mini%";
@@ -291,32 +376,21 @@ SELECT * FROM employees WHERE lastName LIKE "%son";
 --* 3)
 SELECT * FROM employees WHERE firstName LIKE "l%";
 
---   ___  _____ _____ ____  _____ _____
---  / _ \|  ___|  ___/ ___|| ____|_   _|
--- | | | | |_  | |_  \___ \|  _|   | |
--- | |_| |  _| |  _|  ___) | |___  | |
---  \___/|_|   |_|   |____/|_____| |_|
 
--- séléctionner a partir d'un certain endroit dans la liste de résultats
--- très utile pour les paginations
-SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20 OFFSET 0; -- récupère les 20 premiers
-SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20 OFFSET 20; -- récupère les 20 suivants
+--?      _  ___ ___ _   _ _____ _   _ ____  _____ ____
+--?     | |/ _ \_ _| \ | |_   _| | | |  _ \| ____/ ___|
+--?  _  | | | | | ||  \| | | | | | | | |_) |  _| \___ \
+--? | |_| | |_| | || |\  | | | | |_| |  _ <| |___ ___) |
+--?  \___/ \___/___|_| \_| |_|  \___/|_| \_\_____|____/
+-- Les jointures en SQL permettent d’associer plusieurs tables dans une même requête.
+-- Cela permet d’exploiter la puissance des bases de données relationnelles pour obtenir des résultats
+--  qui combinent les données de plusieurs tables de manière efficace.
 
---? exercices :
---? 1) séléctionner 25 entrées dans la table orders à partir de la 50ème, ne récupérer que le orderNumber, orderDate, status en les triant par date
---? 2) séléctionner 25 entrées dans la table orders à partir de la 25ème (ce qui équivaut à la 2eme page dans le cas d'un site web),
---?    ne récupérer que le orderNumber, orderDate, status en les triant par date
---?    pour toutes les entrées dont le status contient "ship"
---? 3) faire de même que 2) mais en récupérant la 3ème et 4èeme page
-
---! correction
---* 1)
-SELECT orderNumber, orderDate, status FROM orders ORDER BY orderDate LIMIT 25 OFFSET 50;
---* 2)
-SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 25;
---* 3)
-SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 50;
-SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 75;
+-- En général, les jointures consistent à associer des lignes de 2 tables en associant l’égalité des valeurs
+-- d’une colonne d’une première table par rapport à la valeur d’une colonne d’une seconde table.
+-- Imaginons qu’une base de 2 données possède une table “utilisateur” et une autre table “adresse” qui contient
+-- les adresses de ces utilisateurs. Avec une jointure, il est possible d’obtenir les données de l’utilisateur
+-- et de son adresse en une seule requête.
 
 --  ___ _   _ _   _ _____ ____        _  ___ ___ _   _
 -- |_ _| \ | | \ | | ____|  _ \      | |/ _ \_ _| \ | |
@@ -325,6 +399,7 @@ SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORD
 -- |___|_| \_|_| \_|_____|_| \_\  \___/ \___/___|_| \_|
 
 -- pour séléctionner des entrées liées entre 2 tables
+-- retourne les enregistrements lorsqu’il y a au moins une ligne dans chaque colonne qui correspond à la condition.
 -- le mot clé INNER est optionnel
 SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
 FROM orders o
@@ -381,6 +456,9 @@ LIMIT 30;
 --  ___) | |___| |___|  _|   | |_| | |_| | || |\  |
 -- |____/|_____|_____|_|      \___/ \___/___|_| \_|
 
+-- En SQL, un SELF JOIN correspond à une jointure d’une table avec elle-même.
+-- Ce type de requête n’est pas si commun mais très pratique dans le cas où une table
+-- lie des informations avec des enregistrements de la même table.
 SELECT
 e.employeeNumber,
 e.firstName,
@@ -399,8 +477,10 @@ ON e.reportsTo = m.employeeNumber;
 -- | |_| | |_| | | | | |___|  _ <  | |_| | |_| | || |\  |
 --  \___/ \___/  |_| |_____|_| \_\  \___/ \___/___|_| \_|
 
--- LEFT OUTER JOIN : le mot clé OUTER est optionnel
--- renvoie toutes les entrées de la table de gauche même si aucune correspondance dans la table de droite
+-- Dans le langage SQL, la commande LEFT JOIN (aussi appelée LEFT OUTER JOIN) est un type de jointure entre 2 tables.
+-- Cela permet de lister tous les résultats de la table de gauche (left = gauche)
+-- même s’il n’y a pas de correspondance dans la deuxième tables.
+--! le mot clé OUTER est optionnel
 SELECT c.customerNumber, c.customerName, o.orderNumber
 FROM customers c
 LEFT OUTER JOIN
@@ -408,14 +488,57 @@ orders o
   ON c.customerNumber = o.customerNumber
 ORDER BY c.customerNumber;
 
--- RIGHT OUTER JOIN : le mot clé OUTER est optionnel
--- renvoie toutes les entrées de la table de droite même si aucune correspondance dans la table de gauche
+-- En SQL, la commande RIGHT JOIN (ou RIGHT OUTER JOIN) est un type de jointure entre 2 tables
+-- qui permet de retourner tous les enregistrements de la table de droite (right = droite)
+-- même s’il n’y a pas de correspondance avec la table de gauche.
+-- S’il y a un enregistrement de la table de droite qui ne trouve pas de correspondance dans la table de gauche,
+-- alors les colonnes de la table de gauche auront NULL pour valeur.
+--! le mot clé OUTER est optionnel
 SELECT c.customerNumber, c.customerName, o.orderNumber
 FROM customers c
 RIGHT OUTER JOIN
 orders o
   ON c.customerNumber = o.customerNumber
 ORDER BY c.customerNumber;
+
+--  _   _    _  _____ _   _ ____      _    _           _  ___ ___ _   _
+-- | \ | |  / \|_   _| | | |  _ \    / \  | |         | |/ _ \_ _| \ | |
+-- |  \| | / _ \ | | | | | | |_) |  / _ \ | |      _  | | | | | ||  \| |
+-- | |\  |/ ___ \| | | |_| |  _ <  / ___ \| |___  | |_| | |_| | || |\  |
+-- |_| \_/_/   \_\_|  \___/|_| \_\/_/   \_\_____|  \___/ \___/___|_| \_|
+
+-- permet de faire une jointure naturelle entre 2 tables. Cette jointure s’effectue à la condition
+-- qu’il y ai des colonnes du même nom et de même type dans les 2 tables.
+
+--! A noter : puisqu’il faut le même nom de colonne sur les 2 tables, cela empêche d’utiliser
+--! certaines règles de nommages pour le nom des colonnes.
+--! Il n’est par exemple pas possible de préfixer le nom des colonnes sous peine d’avoir malheureusement
+--! 2 noms de colonnes différents.
+SELECT c.customerName, p.amount FROM customers c NATURAL JOIN payments p;
+
+--? exercices :
+--? 1) faire une jointure naturelle sur la table employees et offices en ne séléctionnant que
+--?    le firstName et lastName dans la table employees et addressLine1, city et country dans la table offices
+
+--! correction
+--* 1)
+SELECT e.firstName, e.lastName, o.addressLine1, o.city, o.country FROM employees e NATURAL JOIN offices o;
+
+--   ____ ____   ___  ____ ____        _  ___ ___ _   _
+--  / ___|  _ \ / _ \/ ___/ ___|      | |/ _ \_ _| \ | |
+-- | |   | |_) | | | \___ \___ \   _  | | | | | ||  \| |
+-- | |___|  _ <| |_| |___) |__) | | |_| | |_| | || |\  |
+--  \____|_| \_\\___/|____/____/   \___/ \___/___|_| \_|
+
+-- Dans le langage SQL, la commande CROSS JOIN est un type de jointure sur 2 tables SQL qui permet de retourner
+-- le produit cartésien. Autrement dit, cela permet de retourner chaque ligne d’une table avec chaque ligne
+-- d’une autre table. Ainsi effectuer le produit cartésien d’une table A qui contient 30 résultats avec
+-- une table B de 40 résultats va produire 1200 résultats (30 x 40 = 1200).
+-- En général la commande CROSS JOIN est combinée avec la commande WHERE pour filtrer
+-- les résultats qui respectent certaines conditions.
+SELECT e.employeeNumber, e.firstName, o.officeCode FROM employees e CROSS JOIN offices o;
+-- ou
+SELECT e.employeeNumber, e.firstName, o.officeCode FROM employees e, offices o;
 
 --  _   _ ____ ___ _   _  ____
 -- | | | / ___|_ _| \ | |/ ___|
@@ -449,23 +572,70 @@ SELECT c.customerName, p.amount, p.paymentDate FROM customers c JOIN payments p 
 
 
 
-
-
-
-
-
-
 --?  _____ ___  _   _  ____ _____ ___ ___  _   _ ____
 --? |  ___/ _ \| \ | |/ ___|_   _|_ _/ _ \| \ | / ___|
 --? | |_ | | | |  \| | |     | |  | | | | |  \| \___ \
 --? |  _|| |_| | |\  | |___  | |  | | |_| | |\  |___) |
 --? |_|   \___/|_| \_|\____| |_| |___\___/|_| \_|____/
 
+--   ____ ___  _   _ _   _ _____
+--  / ___/ _ \| | | | \ | |_   _|
+-- | |  | | | | | | |  \| | | |
+-- | |__| |_| | |_| | |\  | | |
+--  \____\___/ \___/|_| \_| |_|
+
+-- retourne le nombre de lignes
+SELECT COUNT(*) AS numberOfPayments FROM payments;
+
+--  ____  _   _ __  __
+-- / ___|| | | |  \/  |
+-- \___ \| | | | |\/| |
+--  ___) | |_| | |  | |
+-- |____/ \___/|_|  |_|
+
+-- retourne le resultat de l'addition des lignes de la colonne
+SELECT SUM(amount) FROM payments;
+
+SELECT customerNumber, SUM(amount)
+FROM payments
+GROUP BY customerNumber
+ORDER BY customerNumber;
+
+--     ___     ______
+--    / \ \   / / ___|
+--   / _ \ \ / / |  _
+--  / ___ \ V /| |_| |
+-- /_/   \_\_/  \____|
+
+-- retourne le resultat moyen
+SELECT AVG(amount) FROM payments;
+
+--  __  __ ___ _   _
+-- |  \/  |_ _| \ | |
+-- | |\/| || ||  \| |
+-- | |  | || || |\  |
+-- |_|  |_|___|_| \_|
+
+-- retourne la valeure minimum
+SELECT MIN(amount) FROM payments;
+
+--  __  __    _    __  __
+-- |  \/  |  / \   \ \/ /
+-- | |\/| | / _ \   \  /
+-- | |  | |/ ___ \  /  \
+-- |_|  |_/_/   \_\/_/\_\
+
+-- retourne la valeure max
+SELECT MAX(amount) FROM payments;
+
 --   ____ ___  _   _  ____    _  _____
 --  / ___/ _ \| \ | |/ ___|  / \|_   _|
 -- | |  | | | |  \| | |     / _ \ | |
 -- | |__| |_| | |\  | |___ / ___ \| |
 --  \____\___/|_| \_|\____/_/   \_\_|
+
+-- concatene plusieurs colonnes / chaines de caractères
+SELECT CONCAT(amount, '$ paid on ', paymentDate) AS message FROM payments;
 
 --?  1) séléctionner le nom complet des employés qui ont pour travail (jobTitle) Sales Rep
 --?  2) séléctionner le nom complet des employés qui ont pour travail (jobTitle) Sales Rep
