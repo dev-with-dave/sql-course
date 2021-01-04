@@ -318,11 +318,51 @@ SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORD
 SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 50;
 SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 75;
 
+--  ___ _   _ _   _ _____ ____        _  ___ ___ _   _
+-- |_ _| \ | | \ | | ____|  _ \      | |/ _ \_ _| \ | |
+--  | ||  \| |  \| |  _| | |_) |  _  | | | | | ||  \| |
+--  | || |\  | |\  | |___|  _ <  | |_| | |_| | || |\  |
+-- |___|_| \_|_| \_|_____|_| \_\  \___/ \___/___|_| \_|
 
+-- pour séléctionner des entrées liées entre 2 tables
+SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
+FROM orders o
+JOIN customers c
+ON o.customerNumber = c.customerNumber;
 
+-- tout les mots clés vu jusqu'a maintenant s'appliquent de la même façon
+SELECT o.orderNumber, o.orderDate, o.status, c.customerName, c.phone
+FROM orders o
+JOIN customers c
+ON o.customerNumber = c.customerNumber
+WHERE o.orderNumber > 10200
+AND o.orderNumber
+BETWEEN 10200 AND 10500
+ORDER BY o.orderNumber
+LIMIT 25
+OFFSET 25;
 
+--? exercices :
+--? 1) séléctionner dans la table customers le customerName faire une jointure sur la table payments pour y récupérer
+--?    le montant et la date de paiement et les trier par montant
+--? 2) rajouter à la requête précédente la orderDate et le status de la table orders et ne garder que les 30 premiers resultats
 
-
+--! correction
+--* 1)
+SELECT c.customerName, p.amount, p.paymentDate
+FROM customers c
+JOIN payments p
+ON c.customerNumber = p.customerNumber
+ORDER BY p.amount;
+--* 2)
+SELECT c.customerName, p.amount, o.orderDate, p.paymentDate, o.status
+FROM customers c
+JOIN payments p
+ON c.customerNumber = p.customerNumber
+JOIN orders o
+ON o.customerNumber = c.customerNumber
+ORDER BY p.amount
+LIMIT 30;
 
 
 
