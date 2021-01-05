@@ -18,4 +18,22 @@ WHERE condition;
 DELETE FROM nom_de_table;
 
 --? exercices :
---? 1)
+--? 1) supprimer tout les utilisateurs qui ont plus de 50 ans
+--? 2) supprimer l'utilisateur qui porte le user_id = 4
+--? 3) supprimer l'utilisateur qui s'appelle Tonald
+--? 4) supprimer tout les utilisateurs
+
+--! correction
+--* 1)
+DELETE FROM users WHERE age > 50;
+
+--* 2)
+DELETE FROM users WHERE user_id = 4;
+
+--* 3)
+DELETE FROM users WHERE first_name = "Tonald";
+
+--* 4)
+DELETE FROM users;
+-- ou
+TRUNCATE TABLE users;
