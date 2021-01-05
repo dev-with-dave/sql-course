@@ -51,7 +51,7 @@ VALUES ("Jean", "Dupont", 37);
 --* 2)
 INSERT INTO users (first_name, last_name, age)
 VALUES
-("Tonald", "Drump", 57)
-("Emmanuel", "Macaron", 41)
-("Erman", "Zigler", 87)
+("Tonald", "Drump", 57),
+("Emmanuel", "Macaron", 41),
+("Erman", "Zigler", 87),
 ("Michel", "Sardine", 77);

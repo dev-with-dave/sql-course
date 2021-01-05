@@ -29,4 +29,18 @@ SET colonne_1 = 'valeur 1',
 WHERE condition;
 
 --? exercice :
---? 1)
+--? 1) dans la table users, modifier le first_name de l'enregistrement portant l'id 3
+--? 2) dans la table users, modifier le first_name et age de l'enregistrement portant l'id 5
+--? 3) dans la table users ajouter une colonne is_admin qui est un bouleen avec une valeur par défaut à false
+--?    ensuite passer cette valeur a true pour l'enregistrement portant l'id 1 et 4
+
+--! correction
+--* 1)
+UPDATE users SET first_name = "Alex" WHERE user_id = 3;
+
+--* 2)
+UPDATE users SET first_name = "Brian", age = 21 WHERE user_id = 5;
+
+--* 3)
+ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT false;
+UPDATE users SET is_admin = true WHERE user_id IN (1, 4);
