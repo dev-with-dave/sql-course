@@ -36,4 +36,22 @@ VALUES
 ('Patrick', 'Chirac', 58);
 
 --? exercices :
---? 1)
+--? 1) ajouter 2 utilisateurs en utilisant 2 fois la commande INSERT INTO
+--? 2) ajouter 4 utilisateurs en utilisant 1 fois la commande INSERT INTO
+
+
+--! correction
+--* 1)
+INSERT INTO users (first_name, last_name, age)
+VALUES ("Pierre", "Dubois", 37);
+
+INSERT INTO users (first_name, last_name, age)
+VALUES ("Jean", "Dupont", 37);
+
+--* 2)
+INSERT INTO users (first_name, last_name, age)
+VALUES
+("Tonald", "Drump", 57)
+("Emmanuel", "Macaron", 41)
+("Erman", "Zigler", 87)
+("Michel", "Sardine", 77);
