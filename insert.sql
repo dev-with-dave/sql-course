@@ -12,7 +12,7 @@ chaque colonne existante (en respectant l’ordre)
   - La syntaxe pour remplir une ligne avec cette méthode est la suivante :
 */
 
-INSERT INTO table VALUES ('valeur 1', 'valeur 2', ...);
+INSERT INTO nom_de_table VALUES ('valeur 1', 'valeur 2', ...);
 
 /*
   - Insérer une ligne en spécifiant les colonnes que vous souhaiter compléter.
@@ -21,7 +21,7 @@ INSERT INTO table VALUES ('valeur 1', 'valeur 2', ...);
         colonnes avant “VALUES”. La syntaxe est la suivante :
 */
 
-INSERT INTO table (nom_colonne_1, nom_colonne_2, ...)
+INSERT INTO nom_de_table (nom_colonne_1, nom_colonne_2, ...)
 VALUES ('valeur 1', 'valeur 2', ...);
 
 /*

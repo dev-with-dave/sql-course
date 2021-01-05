@@ -5,7 +5,7 @@
 */
 
 -- La syntaxe basique d’une requête utilisant UPDATE est la suivante :
-UPDATE table
+UPDATE nom_de_table
 SET nom_colonne_1 = 'nouvelle valeur'
 WHERE condition;
 
@@ -22,7 +22,7 @@ WHERE condition;
   Ainsi la syntaxe deviendrait la suivante :
 */
 
-UPDATE table
+UPDATE nom_de_table
 SET colonne_1 = 'valeur 1',
     colonne_2 = 'valeur 2',
     colonne_3 = 'valeur 3'
