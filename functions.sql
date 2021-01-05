@@ -13,6 +13,17 @@
 -- retourne le nombre de lignes
 SELECT COUNT(*) AS numberOfPayments FROM payments;
 
+--? exercices :
+--? 1) compter le nombres de customers
+--? 2) compter le nombres de products
+
+--! correction
+--* 1)
+SELECT COUNT(*) FROM customers;
+
+--* 2)
+SELECT COUNT(*) FROM products;
+
 --  ____  _   _ __  __
 -- / ___|| | | |  \/  |
 -- \___ \| | | | |\/| |
@@ -27,6 +38,13 @@ FROM payments
 GROUP BY customerNumber
 ORDER BY customerNumber;
 
+--? exercices :
+--? 1) calculer le prix total des commandes de la table orderdetails
+
+--! correction
+--* 1)
+SELECT SUM(priceEach) FROM orderdetails;
+
 --     ___     ______
 --    / \ \   / / ___|
 --   / _ \ \ / / |  _
@@ -34,6 +52,13 @@ ORDER BY customerNumber;
 -- /_/   \_\_/  \____|
 
 -- retourne le resultat moyen
+SELECT AVG(amount) FROM payments;
+
+--? exercices :
+--? 1) calculer le montant moyen des paiement de la table payments
+
+--! correction
+--* 1)
 SELECT AVG(amount) FROM payments;
 
 --  __  __ ___ _   _
@@ -45,6 +70,13 @@ SELECT AVG(amount) FROM payments;
 -- retourne la valeure minimum
 SELECT MIN(amount) FROM payments;
 
+--? exercices :
+--? 1) afficher le prix le moins cher de la table products en utilisant la fonction MIN
+
+--! correction
+--* 1)
+SELECT MIN(buyPrice) AS minPrice FROM products;
+
 --  __  __    _    __  __
 -- |  \/  |  / \   \ \/ /
 -- | |\/| | / _ \   \  /
@@ -53,6 +85,13 @@ SELECT MIN(amount) FROM payments;
 
 -- retourne la valeure max
 SELECT MAX(amount) FROM payments;
+
+--? exercices :
+--? 1) afficher le prix le plus cher de la table products en utilisant la fonction MIN
+
+--! correction
+--* 1)
+SELECT MAX(buyPrice) AS maxPrice FROM products;
 
 --   ____ ___  _   _  ____    _  _____
 --  / ___/ _ \| \ | |/ ___|  / \|_   _|
