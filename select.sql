@@ -43,7 +43,7 @@ SELECT customerNumber, customerName FROM customers;
 
 --! correction :
 --* 1)
-SELECT productName, productDescription, quantityInStock, buyPrice FROM products;
+SELECT productName, quantityInStock, buyPrice FROM products;
 --* 2)
 SELECT firstName, lastName, email, jobTitle FROM employees;
 --* 3)
@@ -68,6 +68,7 @@ SELECT DISTINCT city FROM customers;
 --? 1) séléctionner tout les états de la table customers en enlevant les doublons
 
 --! correction
+--* 1)
 SELECT DISTINCT state FROM customers;
 
 -- __        ___   _ _____ ____  _____
@@ -139,13 +140,13 @@ ORDER BY customerName ASC;
 
 --? exercices :
 --?  1) séléctionner la date de paiement et le montant de chaque paiement dans la table payements en ordonnant par date de manière décroissante
---?  2) séléctionner la date de paiement et le montant pour les paiements supérieurs à 60000 dans la table payements en ordonnant par montant de manière croissante
+--?  2) séléctionner la date de paiement et le montant pour les paiements supérieurs à 60000 dans la table payements en ordonnant par montant de manière decroissante
 
 --! correction :
 --* 1)
 SELECT paymentDate, amount FROM payments ORDER BY paymentDate DESC;
 --* 2)
-SELECT paymentDate, amount FROM payments WHERE amount > 60000 ORDER BY amount ASC;
+SELECT paymentDate, amount FROM payments WHERE amount > 60000 ORDER BY amount DESC;
 
 --  _     ___ __  __ ___ _____
 -- | |   |_ _|  \/  |_ _|_   _|
@@ -208,10 +209,10 @@ SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20, 20; 
 --* 1)
 SELECT orderNumber, orderDate, status FROM orders ORDER BY orderDate LIMIT 25 OFFSET 50;
 --* 2)
-SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 25;
+SELECT orderNumber, orderDate, status FROM orders WHERE status ORDER BY orderDate LIMIT 25 OFFSET 25;
 --* 3)
-SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 50;
-SELECT orderNumber, orderDate, status FROM orders WHERE status LIKE "%ship%" ORDER BY orderDate LIMIT 25 OFFSET 75;
+SELECT orderNumber, orderDate, status FROM orders WHERE status ORDER BY orderDate LIMIT 25 OFFSET 50;
+SELECT orderNumber, orderDate, status FROM orders WHERE status ORDER BY orderDate LIMIT 25 OFFSET 75;
 
 --   ___  ____       __     _    _   _ ____
 --  / _ \|  _ \     / /    / \  | \ | |  _ \
@@ -226,7 +227,7 @@ SELECT customerName, city, country FROM customers WHERE city = "London" AND coun
 
 --? exercices:
 --? 1) séléctionner le nom du produit, sa quantité et son prix pour les produits qui ont une quantité superieure à 5000 ou un prix supérieur à 60
---? 2) séléctionner les commandes dont le status est "Shipped" et la date de commande superieure au 30 avril 2005 (attention datte au format YYYY-MM-DD)
+--? 2) séléctionner les commandes dont le status est "Shipped" et la date de commande superieure au 30 avril 2005 (attention date au format YYYY-MM-DD)
 --? 3) séléctionner le produit avec le code "S24_2000" et dont le prix total est superieur à 500 (peut être quelque chose à faire avec le prix et la quantité pour avoir le prix total)
 
 --! correction
@@ -235,7 +236,7 @@ SELECT productName, quantityInStock, buyPrice FROM products WHERE quantityInStoc
 --* 2)
 SELECT * FROM orders WHERE status = "Shipped" AND orderDate > '2005-04-30';
 --* 3)
-SELECT productCode, quantityInStock, buyPrice, from products WHERE productCode = "S24_2000" AND (quantityInStock * buyPrice > 500);
+SELECT productCode, quantityInStock, buyPrice FROM products WHERE productCode = "S24_2000" AND (quantityInStock * buyPrice > 500);
 
 --  _   _  ___ _____
 -- | \ | |/ _ \_   _|
@@ -249,7 +250,7 @@ SELECT customerName, country FROM customers WHERE NOT (country = "USA" OR countr
 
 --? exercices:
 --? 1) séléctionner tous les employés qui n'ont pas pour jobTitle : Sales Rep
---? 2) séléctionner les bureaux qui ne sont pas situés dans aux USA et les classer par pays
+--? 2) séléctionner les bureaux qui ne sont pas situés aux USA et les classer par pays
 
 --! correction
 --* 1)
@@ -264,7 +265,7 @@ SELECT * FROM offices WHERE NOT country = "USA" ORDER BY country;
 -- |___|_| \_|
 
 -- L’opérateur logique IN dans SQL  s’utilise avec la commande WHERE pour vérifier
--- si une colonne est égale à une des valeurs comprise dans set de valeurs déterminés.
+-- si une colonne est égale à une des valeurs comprise dans un set de valeurs déterminés.
 -- C’est une méthode simple pour vérifier si une colonne est égale à une valeur
 -- OU une autre valeur OU une autre valeur et ainsi de suite,
 -- sans avoir à utiliser de multiple fois l’opérateur OR.
