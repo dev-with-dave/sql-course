@@ -23,7 +23,7 @@ lequel la cardinalité d'une entité peut prendre sa valeur :
 
 - un utilisateur peut écrire plusieurs posts - un post peut être écrit par un seul utilisateur
   - --> 0N Users, 11 Posts
-- un utilisateur peut avoir écrit un ou plusieurs commentaires - un commentaire peut avoir été écrit par un seul utilisateur
+- un utilisateur peut avoir écrit zéro ou plusieurs commentaires - un commentaire peut avoir été écrit par un seul utilisateur
   - --> 0N Users, 11 Comments
 - un post peut avoir été commenté plusieurs fois - un commentaire ne peut être présent que sur un post
   - --> 0N Posts, 11 Comments

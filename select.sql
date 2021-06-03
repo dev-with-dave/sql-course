@@ -36,7 +36,7 @@ SELECT * FROM orders;
 SELECT customerNumber, customerName FROM customers;
 
 --? exercices :
---? 1) séléctionner le nom du produit, sa déscription, sa quantité restante et son prix dans la table products
+--? 1) séléctionner le nom du produit, sa quantité restante et son prix dans la table products
 --? 2) séléctionner le nom complet (first + last), l'email et le job des employés de la table employees
 --? 3) séléctionner le status, la date de commande et la date d'envoi des commandes de la table orders
 --? 4) séléctionner le nom, l'addresse, la ville et le pays des clients de la table customers
@@ -168,13 +168,22 @@ ORDER BY customerName DESC
 LIMIT 20;
 
 --? exercices :
---? 1) séléctionner tout dans la table orders pour les 5 dernières commandes
+--? 1) séléctionner tout sauf les comentaires dans la table orders pour les 5 dernières commandes
 --? 2) séléctionner le nom du produit, sa quantité et son prix dans la table products
 --?    pour les 20 produits qui ont le moins de quantité
 
 --! correction :
 --* 1)
-SELECT * FROM orders ORDER BY orderDate DESC LIMIT 5;
+SELECT orderNumber,
+  orderDate,
+  requiredDate,
+  shippedDate,
+  status,
+  customerNumber
+FROM orders 
+ORDER BY orderDate DESC 
+LIMIT 5;
+
 --* 2)
 SELECT productName, quantityInStock, buyPrice FROM products ORDER BY quantityInStock LIMIT 20;
 
@@ -202,7 +211,7 @@ SELECT customerName, country FROM customers ORDER BY customerName LIMIT 20, 20; 
 --? 1) séléctionner 25 entrées dans la table orders à partir de la 50ème, ne récupérer que le orderNumber, orderDate, status en les triant par date
 --? 2) séléctionner 25 entrées dans la table orders à partir de la 25ème (ce qui équivaut à la 2eme page dans le cas d'un site web),
 --?    ne récupérer que le orderNumber, orderDate, status en les triant par date
---?    pour toutes les entrées dont le status contient "ship"
+--?    pour toutes les entrées dont le status est égal à "shipped"
 --? 3) faire de même que 2) mais en récupérant la 3ème et 4èeme page
 
 --! correction
@@ -228,7 +237,7 @@ SELECT customerName, city, country FROM customers WHERE city = "London" AND coun
 --? exercices:
 --? 1) séléctionner le nom du produit, sa quantité et son prix pour les produits qui ont une quantité superieure à 5000 ou un prix supérieur à 60
 --? 2) séléctionner les commandes dont le status est "Shipped" et la date de commande superieure au 30 avril 2005 (attention date au format YYYY-MM-DD)
---? 3) séléctionner le produit avec le code "S24_2000" et dont le prix total est superieur à 500 (peut être quelque chose à faire avec le prix et la quantité pour avoir le prix total)
+--? 3) séléctionner le produit avec le code "S24_2000" ou "S24_1628" ou "S18_3233" et dont le prix total est superieur à 500 (peut être quelque chose à faire avec le prix et la quantité pour avoir le prix total) dans la table products
 
 --! correction
 --* 1)
@@ -236,7 +245,11 @@ SELECT productName, quantityInStock, buyPrice FROM products WHERE quantityInStoc
 --* 2)
 SELECT * FROM orders WHERE status = "Shipped" AND orderDate > '2005-04-30';
 --* 3)
-SELECT productCode, quantityInStock, buyPrice FROM products WHERE productCode = "S24_2000" AND (quantityInStock * buyPrice > 500);
+SELECT * FROM products WHERE productCode = "S24_2000" OR productCode = "S24_1628" OR productCode = "S18_3233" AND quantityInStock*buyPrice > 600;
+
+
+-- --* 3)
+-- SELECT productCode, quantityInStock, buyPrice FROM products WHERE productCode = "S24_2000" AND (quantityInStock * buyPrice > 500);
 
 --  _   _  ___ _____
 -- | \ | |/ _ \_   _|
@@ -275,8 +288,8 @@ SELECT customerName, city FROM customers WHERE city NOT IN ("London", "Paris", "
 -- On peut aussi l'utiliser avec le NOT
 
 --? exercices :
---? 1) séléctionner le nom et la ville et le pays des clients qui habitent en france, aux états unis ou en allemagne, ordonner par pays
---? 2) séléctionner les bureaux qui ne sont pas situés dans aux USA en australie ou au royaume unis et les classer par pays
+--? 1) séléctionner le nom, la ville et le pays des clients qui habitent en france, aux états unis ou en allemagne, ordonner par pays
+--? 2) séléctionner les bureaux qui ne sont pas situés aux USA en australie ou au royaume unis et les classer par pays
 --? 3) séléctionner le nom du produit, sa quantité et son prix ou le prix est égal à 75.16, 101.51, 68.30, 29.34 et 46.53, les trier par prix décroissant
 
 --! correction
@@ -470,7 +483,7 @@ m.firstName,
 m.lastName
 FROM employees e
 JOIN employees m
-ON e.reportsTo = m.employeeNumber;
+  ON e.reportsTo = m.employeeNumber;
 
 --   ___  _   _ _____ _____ ____        _  ___ ___ _   _
 --  / _ \| | | |_   _| ____|  _ \      | |/ _ \_ _| \ | |

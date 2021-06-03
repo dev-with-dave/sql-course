@@ -15,6 +15,6 @@ Users, Posts, Comments, Categories
 
 - comments : comment_id (PK), content, user_id(FK), post_id(FK), created_at, updated_at
 
-- categories : category_id(PK), content, created_at, updated_at
+- categories : category_id(PK), name, color, created_at, updated_at
 
 - category_belongs_to_post : category_id (PK), post_id(PK), created_at, updated_at
